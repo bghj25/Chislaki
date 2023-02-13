@@ -27,4 +27,4 @@ RMSD = 0
 for i in range(1, 2 * n1 - 1, 2): #СКО считаем только в точках лежащих между "заданными"
     RMSD += (y_arr_interp[i] - y_arr[i]) ** 2
 RMSD /= (2 * n1 - 1)
-
+print(RMSD)
