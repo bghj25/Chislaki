@@ -14,7 +14,6 @@ n1 = int(input())
 x_arr = np.linspace(0, 10, num=2 * n1 - 1)
 y_arr = np.sinh((np.sin(x_arr / 5)) ** 2)
 plt.plot(x_arr, y_arr)
-
 y_arr_interp = []
 for x in x_arr:
     y = 0
@@ -22,9 +21,10 @@ for x in x_arr:
         y += y_arr[2 * i] * L(n1, i, x_arr, x)
     y_arr_interp.append(y)
 plt.plot(x_arr, y_arr_interp)
-plt.show()
+
 RMSD = 0
 for i in range(1, 2 * n1 - 1, 2): #СКО считаем только в точках лежащих между "заданными"
     RMSD += (y_arr_interp[i] - y_arr[i]) ** 2
 RMSD /= (2 * n1 - 1)
 print(RMSD)
+
