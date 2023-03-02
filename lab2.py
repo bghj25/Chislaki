@@ -42,7 +42,6 @@ plt.plot(x_arr_to_plot, y_arr_derivative)
 y_arr_derivative = []
 print(y_arr_to_plot)
 for i in range(2, n + 2):
-
     y_arr_derivative.append((-y_arr[i + 2] + 16 * y_arr[i + 1] * y_arr[i] - 30 * y_arr[i] +
                              16 * y_arr[i - 1] - y_arr[i - 2])/(h ** 4))
 
