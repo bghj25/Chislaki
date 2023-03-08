@@ -1,54 +1,94 @@
 import numpy as np
 import matplotlib.pyplot as plt
-a = 0
-b = 5
+
+
+def mse(arr1, arr2, n_):
+    return np.sum((arr1 - arr2) ** 2 / n_)
+
+
+def der_1_right(y_arr_, n_, h_):
+    y_arr_derivative_ = []
+    for i in range(n_ - 1):
+        y_arr_derivative_.append((y_arr_[i + 1] - y_arr_[i]) / h_)
+    return y_arr_derivative_
+
+
+def der_1_central(y_arr_, n_, h_):
+    y_arr_derivative_ = []
+    for i in range(1, n_ - 1):
+        y_arr_derivative_.append((y_arr_[i + 1] - y_arr_[i - 1]) / (2 * h_))
+    return y_arr_derivative_
+
+
+def der_2_ord2(y_arr_, n_, h_):
+    y_arr_derivative_ = []
+    for i in range(1, n_ - 1):
+        y_arr_derivative_.append((y_arr_[i + 1] - 2 * y_arr_[i] + y_arr_[i - 1]) / h_**2)
+    return y_arr_derivative_
+
+
+def der_2_ord4(y_arr_, n_, h_):
+    y_arr_derivative_ = []
+    for i in range(2, n_ - 2):
+        y_arr_derivative_.append((-y_arr_[i + 2] + 16 * y_arr_[i + 1] - 30 * y_arr_[i] +
+                                 16 * y_arr_[i - 1] - y_arr_[i - 2])/(12 * h_**2))
+    return y_arr_derivative_
+
+
+a = -1.5
+b = 1.5
 n = int(input())
 h = (b - a)/n
+x_arr = np.linspace(a, b, n)
+y_arr = x_arr / (1 + (np.tan(x_arr)) ** 2)
+y_arr_analytic = ((np.cos(x_arr)*np.tan(x_arr))**2 - 2*x_arr*np.tan(x_arr) + (np.cos(x_arr))**2) / \
+                 (np.cos(x_arr)*((np.tan(x_arr))**2+1))**2
 
-x_arr = np.linspace(a - 2 * (b - a) / (n - 1), b + 2 * (b - a) / (n - 1), n + 4)
-#print(x_arr)
-y_arr = x_arr ** 3
-x_arr_to_plot = np.delete(x_arr, [0, 1, len(x_arr) - 1, len(x_arr) - 2])
-y_arr_to_plot = np.delete(y_arr, [0, 1, len(y_arr) - 1, len(y_arr) - 2])
-
-y_arr_derivative = []
-for i in range(2, n + 2):
-    y_arr_derivative.append((y_arr[i + 1] - y_arr[i]) / h)
-
-fig = plt.figure()
-fig.suptitle('Первая производная, правые разности')
-plt.plot(x_arr_to_plot, y_arr_to_plot)
-plt.plot(x_arr_to_plot, y_arr_derivative)
-
-y_arr_derivative = []
-for i in range(2, n + 2):
-    y_arr_derivative.append((y_arr[i + 1] - y_arr[i - 1])/(2 * h))
+t = np.tan(x_arr)
+s = 1 / (np.cos(x_arr))
+zn = 1 + t ** 2
+d1 = 8 * x_arr * t**2 * s**4 / zn**3
+d2 = -2 * x_arr * s**4 / zn**2
+d3 = -4 * x_arr * t**2 * s**2 / zn**2
+d4 = -4 * t * s**2 / zn**2
+y_arr_analytic_2nd = d1 + d2 + d3 + d4
 
 fig = plt.figure()
-fig.suptitle('Первая производная, центральные разности')
-plt.plot(x_arr_to_plot, y_arr_to_plot)
+y_arr_derivative = der_1_right(y_arr, n, h)
+x_arr_to_plot = np.delete(x_arr, n - 1)
+y_arr_analytic_to_plot = np.delete(y_arr_analytic, n - 1)
+plt.plot(x_arr_to_plot, y_arr_analytic_to_plot)
 plt.plot(x_arr_to_plot, y_arr_derivative)
-
-y_arr_derivative = []
-for i in range(2, n + 2):
-    y_arr_derivative.append((y_arr[i + 1] - 2 * y_arr[i] + y_arr[i - 1])/(h ** 2))
+fig.suptitle('Первая производная, правые разности \n СКО = ' +
+             str(mse(y_arr_analytic_to_plot, y_arr_derivative, len(y_arr_derivative))))
 
 fig = plt.figure()
-fig.suptitle('Вторая производная, второй порядок точности')
-plt.plot(x_arr_to_plot, y_arr_to_plot)
+y_arr_derivative = der_1_central(y_arr, n, h)
+x_arr_to_plot = np.delete(x_arr, [0, n - 1])
+y_arr_analytic_to_plot = np.delete(y_arr_analytic, [0, n - 1])
+plt.plot(x_arr_to_plot, y_arr_analytic_to_plot)
 plt.plot(x_arr_to_plot, y_arr_derivative)
-
-
-y_arr_derivative = []
-print(y_arr_to_plot)
-for i in range(2, n + 2):
-    y_arr_derivative.append((-y_arr[i + 2] + 16 * y_arr[i + 1] * y_arr[i] - 30 * y_arr[i] +
-                             16 * y_arr[i - 1] - y_arr[i - 2])/(h ** 4))
+fig.suptitle('Первая производная, центральные разности \n СКО = ' +
+             str(mse(y_arr_analytic_to_plot, y_arr_derivative, len(y_arr_derivative))))
 
 fig = plt.figure()
-fig.suptitle('Вторая производная, четвертый порядок точности')
-plt.plot(x_arr_to_plot, y_arr_to_plot)
+y_arr_derivative = der_2_ord2(y_arr, n, h)
+x_arr_to_plot = np.delete(x_arr, [0, n - 1])
+y_arr_analytic_to_plot = np.delete(y_arr_analytic_2nd, [0, n - 1])
+plt.plot(x_arr_to_plot, y_arr_analytic_to_plot)
 plt.plot(x_arr_to_plot, y_arr_derivative)
+fig.suptitle('Вторая производная, второй порядок точности \n СКО = ' +
+             str(mse(y_arr_analytic_to_plot, y_arr_derivative, len(y_arr_derivative))))
+
+fig = plt.figure()
+y_arr_derivative = der_2_ord4(y_arr, n, h)
+x_arr_to_plot = np.delete(x_arr, [0, 1, n - 2, n - 1])
+y_arr_analytic_to_plot = np.delete(y_arr_analytic_2nd, [0, 1, n - 2, n - 1])
+print(x_arr_to_plot)
+print(y_arr_derivative)
+plt.plot(x_arr_to_plot, y_arr_analytic_to_plot)
+plt.plot(x_arr_to_plot, y_arr_derivative)
+fig.suptitle('Вторая производная, четвертый порядок точности \n СКО = ' +
+             str(mse(y_arr_analytic_to_plot, y_arr_derivative, len(y_arr_derivative))))
 
 plt.show()
-
