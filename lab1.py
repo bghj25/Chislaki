@@ -13,6 +13,7 @@ def L(n, i, x_ar, x):
 n1 = int(input())
 x_arr = np.linspace(0, 10, num=2 * n1 - 1)
 y_arr = np.sinh((np.sin(x_arr / 5)) ** 2)
+#plt.axvline(x = x_arr, ymin = 0, ymax = 1, alpha = 0.1)
 plt.plot(x_arr, y_arr)
 y_arr_interp = []
 for x in x_arr:
