@@ -27,31 +27,35 @@ def der_2_analytic(x_arr_):
 
 
 def der_1_right(y_arr_, n_, h_):
-    y_arr_derivative_ = []
-    for i in range(n_ - 1):
-        y_arr_derivative_.append((y_arr_[i + 1] - y_arr_[i]) / h_)
+    y_arr_derivative_ = np.array([])
+    for i_ in range(n_ - 1):
+        y_arr_derivative_ = np.append(y_arr_derivative_, (y_arr_[i_ + 1] - y_arr_[i_]) / h_)
     return y_arr_derivative_
 
 
 def der_1_central(y_arr_, n_, h_):
-    y_arr_derivative_ = []
-    for i in range(1, n_ - 1):
-        y_arr_derivative_.append((y_arr_[i + 1] - y_arr_[i - 1]) / (2 * h_))
+    y_arr_derivative_ = np.array([])
+    for i_ in range(1, n_ - 1):
+        y_arr_derivative_ = np.append(y_arr_derivative_, (y_arr_[i_ + 1] - y_arr_[i_ - 1]) / (2 * h_))
     return y_arr_derivative_
 
 
 def der_2_ord2(y_arr_, n_, h_):
-    y_arr_derivative_ = []
-    for i in range(1, n_ - 1):
-        y_arr_derivative_.append((y_arr_[i + 1] - 2 * y_arr_[i] + y_arr_[i - 1]) / h_ ** 2)
+    y_arr_derivative_ = np.array([])
+    for i_ in range(1, n_ - 1):
+        y_arr_derivative_ = np.append(y_arr_derivative_,
+                                      (y_arr_[i_ + 1] - 2 * y_arr_[i_] +
+                                       y_arr_[i_ - 1]) / h_ ** 2)
     return y_arr_derivative_
 
 
 def der_2_ord4(y_arr_, n_, h_):
-    y_arr_derivative_ = []
-    for i in range(2, n_ - 2):
-        y_arr_derivative_.append((-y_arr_[i + 2] + 16 * y_arr_[i + 1] - 30 * y_arr_[i] +
-                                  16 * y_arr_[i - 1] - y_arr_[i - 2]) / (12 * h_ ** 2))
+    y_arr_derivative_ = np.array([])
+    for i_ in range(2, n_ - 2):
+        y_arr_derivative_ = np.append(y_arr_derivative_,
+                                      (-y_arr_[i_ + 2] + 16 * y_arr_[i_ + 1] -
+                                       30 * y_arr_[i_] + 16 * y_arr_[i_ - 1] -
+                                       y_arr_[i_ - 2]) / (12 * h_ ** 2))
     return y_arr_derivative_
 
 
